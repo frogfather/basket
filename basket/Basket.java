@@ -5,12 +5,12 @@ import java.io.Console;
 public class Basket{
   private String name;
   private ArrayList<Item> items;
- // private ArrayList<Discount> discounts;
+ private ArrayList<Discount> discounts;
 
-public Basket(){
-  this.name = "my_basket";
+public Basket(String name){
+  this.name = name;
   this.items = new ArrayList<Item>();
-  // this.discounts = new ArrayList<Discount>();
+  this.discounts = new ArrayList<Discount>();
   }
 
 
