@@ -4,9 +4,9 @@ import java.io.Console;
 
 public class Item{
   private String name;
-  private Float price;
+  private Double price;
 
-public Item(String name; Float price){
+public Item(String name, Double price){
   this.name = name;
   this.price = price;
 }  
@@ -15,7 +15,7 @@ public String getName(){
   return this.name;
 }
 
-public Float getPrice(){
+public Double getPrice(){
   return this.price;
 }
 
