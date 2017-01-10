@@ -17,7 +17,7 @@ public void before(){
   item1 = new Item("Corn Flakes",0.99);
   item2 = new Item("Milk",1.25);
   item3 = new Item("Milk",1.25);
-  discount1 = new Discount("Milk","bogof",2,0.50);
+  discount1 = new Discount("Milk","bogof",2,50.0);
   discount2 = new Discount("Over Twenty","Total",0,10.0);
   discount3 = new Discount("Loyalty","Total",0,2.0);
 
@@ -60,6 +60,15 @@ public void canUpdateHash(){
   basket1.addItem(item2);
   basket1.addItem(item3);
   assertEquals(2, basket1.getItemQuantity("Milk"));
+}
+
+@Test
+public void canCalcDiscount(){
+  basket1.addItem(item1);
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  basket1.addDiscount(discount1);
+assertEquals(1.25,basket1.calcBogof(),0.01);
 }
 
 }

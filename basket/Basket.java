@@ -24,23 +24,44 @@ public void addItem(Item item){
   updateHash(item.getName(),true);
 }
 
-public int getItemPosition(String name){
-  int itemPosition = -1;
+public Item getItem(String name){
   for (Item temp : this.items){
     if (temp.getName().equals(name)){
-      itemPosition = this.items.indexOf(temp);
+      return temp;
     }
   }
-  return itemPosition;
+  return null;
 }
 
 public void deleteItem(String name){
-  int itemPostition = getItemPosition(name);
-  if (itemPostition > -1){
-    this.items.remove(itemPostition);
+  Item toDelete = getItem(name);
+  if (toDelete != null){
+    this.items.remove(this.items.indexOf(toDelete));
   updateHash(name,false);  
     } 
   }
+
+  public void addDiscount(Discount discount){
+    this.discounts.add(discount);
+  }
+
+  public Discount getDiscount(String name){
+    for (Discount temp : this.discounts){
+      if (temp.getItemName().equals(name)){
+        return temp;
+      }
+    }
+    return null;
+  }
+
+
+  public void deleteDiscount(String name){
+    Discount toDelete = getDiscount(name);
+    if (toDelete != null){
+      this.discounts.remove(this.discounts.indexOf(toDelete));
+      } 
+    }
+
 
 public void emptyBasket(){
 this.items.clear();
@@ -84,9 +105,28 @@ public int getItemHashCount(){
 public Double calcBogof(){
   if (this.discounts.size() > 0){
     for (Discount temp : this.discounts){
-      
+      if (temp.getCategory().equals("bogof")){
+      //find how many of this product we have
+      String itemName = temp.getItemName();
+      int quantForDiscount = temp.getQuantity();
+      int quantInHand = getItemQuantity(itemName); 
+      if (quantInHand >= quantForDiscount){
+      int numberOfDiscounts = quantInHand/quantForDiscount; 
+      Item thisItem = getItem(itemName);
+      //numberOfDiscounts is how many times we 
+      //apply the discount. So if the discount
+      //is on two items and we have 5 it gets 
+      //applied twice
+      //we now need the price of the item
+      //and the discount to apply
+      Double itemPrice = thisItem.getPrice();
+      Double thisDiscount = (quantForDiscount * numberOfDiscounts *itemPrice * temp.getPercentage()/100);
+      return thisDiscount;
+      }
+      }
     }
   }
+  return 0.0;
 }
 
 }

@@ -13,7 +13,7 @@ public void before(){
 
 @Test
 public void canGetItem(){
-  assertEquals("Corn Flakes",discount1.getItem());
+  assertEquals("Corn Flakes",discount1.getItemName());
 }
 
 @Test

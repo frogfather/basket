@@ -15,7 +15,7 @@ public Discount(String item, String category, int quantity, Double percentage){
   this.percentage = percentage;
   }  
 
-public String getItem(){
+public String getItemName(){
   return this.item;
 }
 
