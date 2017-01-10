@@ -24,4 +24,42 @@ public void before(){
   basket1 = new Basket("Test basket");
 }
 
+@Test
+public void canGetName(){
+  assertEquals("Test basket",basket1.getName());
+}
+
+@Test
+public void canAddItem(){
+  basket1.addItem(item1);
+  assertEquals(1,basket1.getItemCount());
+}
+@Test
+public void canRemoveItem(){
+  basket1.addItem(item1);
+  assertEquals(1,basket1.getItemCount()); 
+  assertEquals(1, basket1.getItemQuantity("Corn Flakes"));
+
+  basket1.deleteItem("Corn Flakes");
+  assertEquals(0,basket1.getItemCount()); 
+  assertEquals(0, basket1.getItemQuantity("Corn Flakes"));
+}
+
+@Test
+public void canEmptyBasket(){
+  basket1.addItem(item1);
+  basket1.addItem(item2);
+  assertEquals(2,basket1.getItemCount());
+  basket1.emptyBasket();
+  assertEquals(0,basket1.getItemCount());
+  assertEquals(0,basket1.getItemHashCount());
+}
+
+@Test 
+public void canUpdateHash(){
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  assertEquals(2, basket1.getItemQuantity("Milk"));
+}
+
 }
