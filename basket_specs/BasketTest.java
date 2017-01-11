@@ -7,9 +7,10 @@ public class BasketTest{
 Item item1;
 Item item2;
 Item item3;
+Item item4;
+Item item5;
 Discount discount1;
 Discount discount2;
-Discount discount3;
 Basket basket1;
 
 @Before
@@ -17,10 +18,11 @@ public void before(){
   item1 = new Item("Corn Flakes",0.99);
   item2 = new Item("Milk",1.25);
   item3 = new Item("Milk",1.25);
+  item4 = new Item("Something expensive",19.00);
+  item5 = new Item("Expensive Thing",17.60);
   discount1 = new Discount("Milk","bogof",2,50.0);
-  discount2 = new Discount("Over Twenty","Total",0,10.0);
-  discount3 = new Discount("Loyalty","Total",0,2.0);
-
+ 
+  discount2 = new Discount("Loyalty","loyalty",0,2.0);
   basket1 = new Basket("Test basket");
 }
 
@@ -69,6 +71,91 @@ public void canCalcDiscount(){
   basket1.addItem(item3);
   basket1.addDiscount(discount1);
 assertEquals(1.25,basket1.calcBogof(),0.01);
+}
+
+@Test
+public void canCalcTotalPrice(){
+  basket1.addItem(item1);
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  assertEquals(3.49,basket1.getBaseTotal(),0.01);
+}
+
+@Test
+public void canCalcOverTwentyPoundDiscount(){
+basket1.addItem(item4);
+basket1.addItem(item2);
+basket1.addItem(item3);
+Double subTotal = basket1.getBaseTotal();
+assertEquals(2.15,basket1.calcOverTwentyDiscount(subTotal),0.01);
+}
+
+@Test
+public void testOverTwentyDiscountNotAppliedUnderTwenty(){
+  basket1.addItem(item4);
+  basket1.addItem(item1);
+  Double subTotal = basket1.getBaseTotal();
+assertEquals(0,basket1.calcOverTwentyDiscount(subTotal),0.01);
+}
+
+@Test
+public void testNoOverTwentyDiscountAfterBogof(){
+  basket1.addItem(item5);
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  basket1.addDiscount(discount1);
+  Double subTotal = basket1.getBaseTotal();
+  Double bogof = basket1.calcBogof();
+  assertEquals(2.01,basket1.calcOverTwentyDiscount(subTotal),0.01);
+ assertEquals(0,basket1.calcOverTwentyDiscount(subTotal-bogof),0.01);
+  }
+
+@Test
+public void testLoyaltyDiscount(){
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  basket1.addDiscount(discount2);
+  Double subTotal = basket1.getBaseTotal();
+assertEquals(0.05,basket1.calcLoyaltyDiscount(subTotal),0.01);  
+}
+
+@Test 
+public void testAllDiscountsTogether(){
+  basket1.addItem(item1);
+  basket1.addItem(item2);
+  basket1.addItem(item3);
+  basket1.addItem(item4);
+  basket1.addItem(item5);
+// total is 40.09
+  basket1.addDiscount(discount1);
+  basket1.addDiscount(discount2);
+Double subTotal = basket1.getBaseTotal();
+assertEquals(40.09,subTotal,0.01);
+Double bogof = basket1.calcBogof();
+assertEquals(1.25,bogof,0.01);
+Double overTwenty = basket1.calcOverTwentyDiscount(subTotal-bogof);
+assertEquals(3.884,overTwenty,0.0001);
+Double loyalty = basket1.calcLoyaltyDiscount(subTotal-bogof-overTwenty);
+assertEquals(0.699,loyalty,0.001);
+}
+
+@Test
+public void noLoyaltyDiscountWithoutCard(){
+   basket1.addItem(item1);
+   basket1.addItem(item2);
+   basket1.addItem(item3);
+   basket1.addItem(item4);
+   basket1.addItem(item5);
+ // total is 40.09
+   basket1.addDiscount(discount1);
+ Double subTotal = basket1.getBaseTotal();
+ assertEquals(40.09,subTotal,0.01);
+ Double bogof = basket1.calcBogof();
+ assertEquals(1.25,bogof,0.01);
+ Double overTwenty = basket1.calcOverTwentyDiscount(subTotal-bogof);
+ assertEquals(3.884,overTwenty,0.0001);
+ Double loyalty = basket1.calcLoyaltyDiscount(subTotal-bogof-overTwenty);
+ assertEquals(0.0,loyalty,0.001); 
 }
 
 }

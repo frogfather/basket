@@ -72,6 +72,16 @@ public int getItemCount(){
   return this.items.size();
 }
 
+public Double getBaseTotal(){
+Double sum = 0.0;  
+if (getItemCount() > 0){
+    for (Item temp : this.items){
+    sum += temp.getPrice();
+    }
+  }
+return sum;
+}
+
 public void updateHash(String name, Boolean add){
       if (itemQuantities.get(name) == null){
       if (add){
@@ -106,19 +116,12 @@ public Double calcBogof(){
   if (this.discounts.size() > 0){
     for (Discount temp : this.discounts){
       if (temp.getCategory().equals("bogof")){
-      //find how many of this product we have
       String itemName = temp.getItemName();
       int quantForDiscount = temp.getQuantity();
       int quantInHand = getItemQuantity(itemName); 
       if (quantInHand >= quantForDiscount){
       int numberOfDiscounts = quantInHand/quantForDiscount; 
       Item thisItem = getItem(itemName);
-      //numberOfDiscounts is how many times we 
-      //apply the discount. So if the discount
-      //is on two items and we have 5 it gets 
-      //applied twice
-      //we now need the price of the item
-      //and the discount to apply
       Double itemPrice = thisItem.getPrice();
       Double thisDiscount = (quantForDiscount * numberOfDiscounts *itemPrice * temp.getPercentage()/100);
       return thisDiscount;
@@ -127,6 +130,23 @@ public Double calcBogof(){
     }
   }
   return 0.0;
+}
+
+public Double calcOverTwentyDiscount(Double price){
+Double discount = 0.0;
+if (price > 20.0){
+  discount = (price * 0.1);
+  }
+return discount;
+}
+
+public Double calcLoyaltyDiscount(Double price){
+  for (Discount temp : this.discounts){
+  if (temp.getCategory().equals("loyalty")){
+    return (price * temp.getPercentage()/100);
+    }
+  }
+return 0.0;  
 }
 
 }
