@@ -9,6 +9,9 @@ Item item2;
 Item item3;
 Item item4;
 Item item5;
+Item item6;
+Item item7;
+Item item8;
 Discount discount1;
 Discount discount2;
 Basket basket1;
@@ -20,6 +23,10 @@ public void before(){
   item3 = new Item("Milk",1.25);
   item4 = new Item("Something expensive",19.00);
   item5 = new Item("Expensive Thing",17.60);
+  item6 = new Item("Milk",1.25);
+  item7 = new Item("Milk",1.25);
+  item8 = new Item("Milk",1.25);
+  
   discount1 = new Discount("Milk","bogof",2,50.0);
  
   discount2 = new Discount("Loyalty","loyalty",0,2.0);
@@ -71,6 +78,17 @@ public void canCalcDiscount(){
   basket1.addItem(item3);
   basket1.addDiscount(discount1);
 assertEquals(1.25,basket1.calcBogof(),0.01);
+}
+
+@Test
+public void canCalcBogofWithMultiples(){
+ basket1.addItem(item2);
+ basket1.addItem(item3);
+ basket1.addItem(item6);
+ basket1.addItem(item7);
+ basket1.addItem(item8);
+ basket1.addDiscount(discount1);
+ assertEquals(2.50,basket1.calcBogof(),0.01); 
 }
 
 @Test
